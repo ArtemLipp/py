@@ -1,4 +1,38 @@
+def alpha(user_string):
+    # Исходный русский алфавит
+    alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
+    
+    # Выводим исходный алфавит
+    print(alphabet)
+    
+    # Преобразуем строку пользователя в нижний регистр
+    user_string = user_string.lower()
+    
+    # Создаем множество использованных букв (для быстрого поиска)
+    used_letters = set(user_string)
+    
+    # Формируем результат: сначала буквы из строки пользователя,
+    # затем остальные буквы алфавита
+    result_chars = []
+    
+    # Добавляем уникальные буквы из строки пользователя в порядке их первого появления
+    seen = set()
+    for char in user_string:
+        if char in alphabet and char not in seen:
+            result_chars.append(char)
+            seen.add(char)
+    
+    # Добавляем оставшиеся буквы алфавита
+    for char in alphabet:
+        if char not in seen:
+            result_chars.append(char)
+    
+    # Объединяем результат в строку
+    result = ''.join(result_chars)
+    print(result)
 
+# Пример использования
+alpha('пайтон')
 
 # ========== ПРАКТИЧЕСКОЕ ЗАДАНИЕ 14 ==========
 
