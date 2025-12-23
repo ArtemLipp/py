@@ -1,133 +1,161 @@
-def alpha(user_string):
-    # Исходный русский алфавит
-    alphabet = "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"
-    
-    # Выводим исходный алфавит
-    print(alphabet)
-    
-    # Преобразуем строку пользователя в нижний регистр
-    user_string = user_string.lower()
-    
-    # Создаем множество использованных букв (для быстрого поиска)
-    used_letters = set(user_string)
-    
-    # Формируем результат: сначала буквы из строки пользователя,
-    # затем остальные буквы алфавита
-    result_chars = []
-    
-    # Добавляем уникальные буквы из строки пользователя в порядке их первого появления
-    seen = set()
-    for char in user_string:
-        if char in alphabet and char not in seen:
-            result_chars.append(char)
-            seen.add(char)
-    
-    # Добавляем оставшиеся буквы алфавита
-    for char in alphabet:
-        if char not in seen:
-            result_chars.append(char)
-    
-    # Объединяем результат в строку
-    result = ''.join(result_chars)
-    print(result)
+# Практическое задание 16: Консольная игра "Лабиринт"
 
-# Пример использования
-alpha('пайтон')
+import random
 
-# ========== ПРАКТИЧЕСКОЕ ЗАДАНИЕ 14 ==========
-
-print("\n\n=== Практическое задание 14 (Исключения) ===")
-
-# Задание 1
-print("\n--- Задание 1 ---")
-def task1():
+def maze_game():
+    print("Начинаем игру. Повороты: [a]-Налево, [w]-Прямо, [d]-Направо")
+    
+    # Счётчики поворотов
+    left_count = 0
+    right_count = 0
+    straight_count = 0
+    total_moves = 0
+    
     while True:
+        move = input("Куда идти? ").strip().lower()
+        
+        # Проверка на корректный ввод
+        if move not in ['a', 'w', 'd']:
+            print("Ошибка: такой кнопки нет. Используйте a, w или d.")
+            continue
+        
+        total_moves += 1
+        
+        # Обработка хода
+        if move == 'a':
+            left_count += 1
+            print("Повернул налево.", end=" ")
+        elif move == 'd':
+            right_count += 1
+            print("Повернул направо.", end=" ")
+        elif move == 'w':
+            straight_count += 1
+            print("Пошёл прямо.", end=" ")
+        
+        # Проверка на выход (вероятность 1 к 10)
+        if random.randint(1, 10) == 1:
+            print("Выход найден. Ты выиграл.")
+            print(f"Для того, чтобы найти выход ты {left_count} раз повернул налево, "
+                  f"{straight_count} раз пошёл прямо и {right_count} раз повернул направо.")
+            print(f"Всего сделано ходов: {total_moves}")
+            break
+        else:
+            print("Выхода пока нет...")
+
+# Запуск игры
+if __name__ == "__main__":
+    maze_game()
+
+
+
+
+
+
+# Практическое задание 17: Сборка фигуры
+
+import random
+import time
+
+# Функция "загрузка" (дополнительное задание)
+def loading_simulator():
+    print("Загрузка...")
+    for i in range(1, 101):
+        print(f"\rПрогресс: {i}%", end="")
+        time.sleep(0.02)  # небольшая задержка для эффекта
+    print("\nЗагрузка завершена!")
+
+# Элементы для фигур (простые примеры)
+figures = [
+    # Фигура 1: Квадрат
+    {
+        "target": [
+            " *** ",
+            "*   *",
+            "*   *",
+            " *** "
+        ],
+        "parts": [
+            ["  *  ", " * * ", "*   *", " * * ", "  *  "],
+            ["*   *", " * * ", "  *  ", " * * ", "*   *"],
+            [" *** ", "*   *", "*   *", "*   *", " *** "],
+            ["  *  ", " *** ", "* * *", " *** ", "  *  "]
+        ]
+    },
+    # Фигура 2: Стрелка
+    {
+        "target": [
+            "  *  ",
+            " *** ",
+            "*****",
+            "  *  ",
+            "  *  "
+        ],
+        "parts": [
+            ["  *  ", "  *  ", "*****", "  *  ", "  *  "],
+            [" *** ", "* * *", "  *  ", "* * *", " *** "],
+            ["*****", " *** ", "  *  ", " *** ", "*****"],
+            ["  *  ", " * * ", "*   *", " * * ", "  *  "]
+        ]
+    }
+]
+
+def generate_figure(parts):
+    """Генерирует случайную фигуру из частей"""
+    figure = []
+    for part_set in parts:
+        figure.append(random.choice(part_set))
+    return figure
+
+def print_figure(fig):
+    """Печатает фигуру построчно"""
+    for line in fig:
+        print(line)
+
+def check_win(current, target):
+    """Проверяет, собрана ли фигура"""
+    return current == target
+
+def figure_game():
+    # Вызываем загрузку
+    loading_simulator()
+    print("\n" + "="*30)
+    
+    # Случайный выбор фигуры
+    fig_data = random.choice(figures)
+    target_fig = fig_data["target"]
+    parts = fig_data["parts"]
+    
+    print("Должна получиться такая фигура:")
+    print_figure(target_fig)
+    print("\nС помощью кнопок 1,2,3,4 меняйте направление элементов фигуры.")
+    
+    # Начальная случайная фигура
+    current_fig = generate_figure(parts)
+    
+    attempts = 0
+    while not check_win(current_fig, target_fig):
+        attempts += 1
+        print(f"\nПопытка #{attempts}")
+        print("Текущая фигура:")
+        print_figure(current_fig)
+        
         try:
-            x = input("число: ")
-            # Пробуем преобразовать в целое число
-            x_int = int(x)
-            if x_int > 0:
-                # Выводим диапазон от 0 до x
-                result = ""
-                for i in range(x_int + 1):
-                    result += str(i) + " "
-                print(result.strip())
-                break
-            else:
-                print("Число должно быть положительным. Попробуйте снова.")
+            choice = int(input("\nВыберите элемент для изменения (1-4): "))
+            if choice < 1 or choice > 4:
+                print("Ошибка: введите число от 1 до 4")
+                continue
+            
+            # Меняем выбранный элемент
+            current_fig[choice-1] = random.choice(parts[choice-1])
+            
         except ValueError:
-            print(f"{x} - не число. Повторите ввод.")
-
-print("Запуск задания 1:")
-# task1()  # Раскомментировать для реального ввода
-
-# Покажем пример работы
-print("\nПример работы задания 1:")
-print(">>> число: abc")
-print(">>> abc - не число. Повторите ввод.")
-print(">>> число: 6")
-print(">>> 0 1 2 3 4 5 6")
-
-# Задание 2
-print("\n--- Задание 2 ---")
-any_list = [4, 3.2, 16, 9, 13.5, 67]
-print("Исходный список:", any_list)
-print("\nДеление каждого элемента на его индекс:")
-
-for index, value in enumerate(any_list):
-    try:
-        result = value / index
-        print(f"{value} / {index} = {result}")
-    except ZeroDivisionError:
-        print(f"Деление на 0! Элемент: {value}")
-
-# Задание 3
-print("\n--- Задание 3 ---")
-def task3():
-    numbers = []
-    print("Введите 5 чисел:")
+            print("Ошибка: введите число!")
     
-    while len(numbers) < 5:
-        try:
-            num = input(f"Введите число {len(numbers)+1}: ")
-            # Пробуем преобразовать в число (может быть float)
-            num_float = float(num)
-            numbers.append(num_float)
-            print(f"Добавлено: {num_float}")
-        except ValueError:
-            print(f"'{num}' - не число. Пропускаем.")
-    
-    print(f"\nЧисла в списке: {numbers}")
+    print("\n" + "="*30)
+    print("Поздравляем! Вы собрали фигуру!")
+    print_figure(current_fig)
+    print(f"Всего попыток: {attempts}")
 
-print("Запуск задания 3:")
-# task3()  # Раскомментировать для реального ввода
-
-# Покажем пример работы
-print("\nПример работы задания 3:")
-print(">>> 8")
-print(">>> abc")
-print(">>> 11")
-print(">>> -2")
-print(">>> 9")
-print(">>> txt")
-print(">>> 4")
-print(">>> Числа в списке: [8.0, 11.0, -2.0, 9.0, 4.0]")
-
-# Дополнительные примеры для задания 3
-print("\nЕще один вариант решения (более простой):")
-numbers_list = []
-print("Будем вводить числа. Для завершения введите 'стоп'")
-
-while True:
-    user_input = input("Введите число (или 'стоп' для завершения): ")
-    if user_input.lower() == 'стоп':
-        break
-    
-    try:
-        num = float(user_input)
-        numbers_list.append(num)
-        print(f"Добавлено число: {num}")
-    except ValueError:
-        print(f"Ошибка: '{user_input}' не является числом")
-
-print(f"\nИтоговый список чисел: {numbers_list}")
+# Запуск игры
+if __name__ == "__main__":
+    figure_game()
